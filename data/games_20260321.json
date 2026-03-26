@@ -1,0 +1,82 @@
+[
+  {
+    "game_id":"0022501025",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"NOP vs. CLE",
+    "team_id":1610612740,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501027",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"MIA @ HOU",
+    "team_id":1610612748,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501022",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"WAS vs. OKC",
+    "team_id":1610612764,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501031",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"PHX vs. MIL",
+    "team_id":1610612756,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501023",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"MEM @ CHA",
+    "team_id":1610612763,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501026",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"GSW @ ATL",
+    "team_id":1610612744,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501029",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"LAC @ DAL",
+    "team_id":1610612746,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501030",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"UTA vs. PHI",
+    "team_id":1610612762,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501024",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"ORL vs. LAL",
+    "team_id":1610612753,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  },
+  {
+    "game_id":"0022501028",
+    "game_date":"2026-03-21",
+    "season":"2025-26",
+    "matchup":"SAS vs. IND",
+    "team_id":1610612759,
+    "fetched_at":"2026-03-22T22:36:47.253325"
+  }
+]
