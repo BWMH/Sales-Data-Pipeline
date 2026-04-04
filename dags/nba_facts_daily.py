@@ -6,7 +6,7 @@ import time
 import json
 import numpy as np
 
-from airflow.sdk import dag, task
+from airflow.sdk import dag, task, Asset
 from nba_api.stats.static import players, teams
 from nba_api.stats.endpoints import (
     leaguegamefinder,
@@ -16,9 +16,9 @@ from nba_api.stats.endpoints import (
     leaguestandings,
     boxscoresummaryv3,
 )
-
+aws_raw_asset = Asset("AWS://NBA.RAW.NBA_FACT")
 SEASON     = "2025-26"
-SLEEP_TIME = 0.6
+SLEEP_TIME = 1
 
 
 def upload_to_s3(records: list, folder_name: str, date_str: str):
@@ -106,13 +106,13 @@ def nba_facts():
 
 
     @task
-    def get_box_scores(games_result: dict) -> dict:
+    def get_box_scores(games_result: dict, **context) -> dict:
         game_ids    = games_result.get("game_ids", [])
         date_nodash = games_result.get("date_nodash")
 
         if not game_ids:
             print("No games to fetch box scores for")
-            return {"count": 0}
+            return {"count": 0, "date_nodash": date_nodash}
 
         print(f"Fetching box scores for {len(game_ids)} games...")
         records = []
@@ -194,7 +194,7 @@ def nba_facts():
 
         print(f"{len(records)} box score rows fetched")
         upload_to_s3(records, "box_scores", date_nodash)
-        return {"count": len(records)}
+        return {"count": len(records), "date_nodash": date_nodash}
 
 
     @task
@@ -230,13 +230,30 @@ def nba_facts():
         print(f"{len(records)} standings fetched")
         upload_to_s3(records, "standings", date_nodash)
         return {"count": len(records)}
+    
+    @task(outlets=[aws_raw_asset])
+    def pipeline_complete(box_scores_result: dict, standings_result: dict, **context) -> str:
+        """
+        Final task — waits for both box_scores AND standings to finish
+        before emitting the asset to trigger downstream Snowflake DAG.
+        """
+        date_nodash = box_scores_result.get("date_nodash")
+
+        context['outlet_events'][aws_raw_asset].extra = {"date": date_nodash}
+
+        print(f"All facts uploaded for {date_nodash}")
+        print(f"  Box scores: {box_scores_result['count']}")
+        print(f"  Standings:  {standings_result['count']}")
+        return f"Success: {date_nodash}"
+
 
 
 
    
-    get_standings()
-    games_result = get_games()
-    get_box_scores(games_result)
+    standings_result  = get_standings()
+    games_result      = get_games()
+    box_scores_result = get_box_scores(games_result)
+    pipeline_complete(box_scores_result, standings_result)
 
    
 nba_facts()

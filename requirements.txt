@@ -3,3 +3,5 @@ boto3
 nba_api
 pendulum
 numpy
+dbt-core
+dbt-snowflake
