@@ -16,7 +16,7 @@ from nba_api.stats.endpoints import (
     leaguestandings,
     boxscoresummaryv3,
 )
-aws_raw_asset = Asset("AWS://NBA.RAW.NBA_FACT")
+aws_raw_asset = Asset("nba_raw_s3_upload_complete")
 SEASON     = "2025-26"
 SLEEP_TIME = 1
 

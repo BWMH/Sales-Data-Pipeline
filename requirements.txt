@@ -5,3 +5,4 @@ pendulum
 numpy
 dbt-core
 dbt-snowflake
+astronomer-cosmos

@@ -46,11 +46,9 @@
 ---
 x-airflow-common:
   &airflow-common
-  # In order to add custom dependencies or upgrade provider distributions you can use your extended image.
-  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
-  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:3.1.7}
   build: .
+  mem_limit: 2g
+  cpus: 2.0
   env_file:
     - ${ENV_FILE_PATH:-.env}
   environment:
@@ -66,7 +64,13 @@ x-airflow-common:
     AIRFLOW__CORE__EXECUTION_API_SERVER_URL: 'http://airflow-apiserver:8080/execution/'
     AIRFLOW__CORE__HOSTNAME_CALLABLE: 'airflow.utils.net.get_host_ip_address'
     AIRFLOW__LOGGING__LOG_FETCHING_TIMEOUT: '30'
-    
+    AIRFLOW__CORE__PARALLELISM: '8'
+    AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG: '4'
+    AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG: '4'
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: '4'
+    AIRFLOW__DAG_PROCESSOR__PARSING_PROCESSES: '1'
+    AIRFLOW__DAG_PROCESSOR__MIN_FILE_PROCESS_INTERVAL: '60'
+    AIRFLOW__DAG_PROCESSOR__REFRESH_INTERVAL: '600'
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
@@ -82,7 +86,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    - ${AIRFLOW_PROJ_DIR:-.}/nba_db_project:/opt/airflow/dbt/nba_db_project
+    - ${AIRFLOW_PROJ_DIR:-.}/nba_pipeline:/opt/airflow/dbt/nba_pipeline
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -94,6 +98,8 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:16
+    mem_limit: 1g
+    cpus: 1.0
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -113,6 +119,8 @@ services:
     # Redis is limited to 7.2-bookworm due to licencing change
     # https://redis.io/blog/redis-adopts-dual-source-available-licensing/
     image: redis:7.2-bookworm
+    mem_limit: 512m
+    cpus: 0.5
     expose:
       - 6379
     healthcheck:
@@ -133,7 +141,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 30s
+      start_period: 60s
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
@@ -173,6 +181,8 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
+    mem_limit: 4g
+    cpus: 4.0
     hostname: airflow-worker
     healthcheck:
       # yamllint disable rule:line-length
