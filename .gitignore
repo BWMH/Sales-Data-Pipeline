@@ -16,3 +16,5 @@ wheels/
 
 # logs
 logs/
+
+nba_pipeline/profiles.yml
