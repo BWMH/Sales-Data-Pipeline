@@ -17,7 +17,7 @@ snowflake_raw_asset = Asset("nba_raw_snowflake_load_complete")
 def nba_s3_to_snowflake():
     
     @task(outlets=[snowflake_raw_asset])
-    def load_to_snowflake(context: Context):
+    def load_to_snowflake(**context):
         folders_list = ['box_scores','games','player_details','standings','team_details','teams']
         # ds_nodash = (context['data_interval_start'] - timedelta(days=1)).strftime('%Y%m%d')
         ds_nodash = (context['logical_date'] - timedelta(days=1)).strftime('%Y%m%d')

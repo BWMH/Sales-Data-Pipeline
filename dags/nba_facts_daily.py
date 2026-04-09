@@ -54,7 +54,7 @@ def upload_to_s3(records: list, folder_name: str, date_str: str):
     start_date=datetime(year=2025, month=10, day=21, tz="UTC"),
      schedule="0 10 * * *",
     is_paused_upon_creation=False,
-    catchup=True,
+    catchup=False,
     max_active_runs=1,
     tags=['nba', 'aws'],
     default_args={

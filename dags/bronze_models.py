@@ -25,6 +25,7 @@ def nba_dbt_transform_bronze():
             target_name="dev",
             profile_mapping=SnowflakeUserPasswordProfileMapping(
                 conn_id="snowflake_nba_conn",
+                profile_args={"schema": "BRONZE"},
             ),
         ),
         execution_config=ExecutionConfig(

@@ -48,7 +48,7 @@ x-airflow-common:
   &airflow-common
   build: .
   mem_limit: 2g
-  cpus: 2.0
+  cpus: 1.0
   env_file:
     - ${ENV_FILE_PATH:-.env}
   environment:
@@ -99,7 +99,7 @@ services:
   postgres:
     image: postgres:16
     mem_limit: 1g
-    cpus: 1.0
+    cpus: 0.5
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -181,8 +181,8 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
-    mem_limit: 4g
-    cpus: 4.0
+    mem_limit: 6g
+    cpus: 2.0
     hostname: airflow-worker
     healthcheck:
       # yamllint disable rule:line-length

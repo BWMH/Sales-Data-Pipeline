@@ -35,3 +35,4 @@ models:
     bronze:
       +materialized: table
       +schema: BRONZE
+      +database: NBA
