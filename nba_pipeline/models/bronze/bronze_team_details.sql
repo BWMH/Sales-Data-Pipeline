@@ -21,8 +21,7 @@ flattened AS (
         f.value AS team_details_data
     FROM source_data,
     LATERAL FLATTEN(input => RAW_JSON) f
-)
-
+), transformed AS(
 SELECT
     {{ dbt_utils.generate_surrogate_key([
         'team_details_data:team_id', 
@@ -50,4 +49,7 @@ SELECT
     inserted_at                     as loaded_at_utc,
     team_details_data:fetched_at::timestamp_ntz as api_fetched_at
 
-FROM flattened
+FROM flattened)
+SELECT *
+FROM transformed
+QUALIFY ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY loaded_at_utc DESC) =1

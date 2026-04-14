@@ -21,7 +21,7 @@ flattened AS (
         f.value AS player_data
     FROM source_data,
     LATERAL FLATTEN(input => RAW_JSON) f
-)
+), transformed AS(
 
 SELECT
     -- 1. Unique Record Identifier (Player + Version)
@@ -57,5 +57,7 @@ SELECT
     inserted_at                             AS loaded_at_utc,
     player_data:fetched_at::timestamp_ntz   AS api_fetched_at,
     player_data:updated_at::timestamp_ntz   AS api_updated_at
-
-FROM flattened
+FROM flattened)
+SELECT *
+FROM transformed
+QUALIFY ROW_NUMBER() OVER (PARTITION BY player_id ORDER BY loaded_at_utc DESC) =1

@@ -36,3 +36,11 @@ models:
       +materialized: table
       +schema: BRONZE
       +database: NBA
+    silver:
+      +materialized: table
+      +schema: SILVER
+      +database: NBA
+snapshots:
+  nba_pipeline:
+    +schema: SNAPSHOTS
+    +database: NBA
