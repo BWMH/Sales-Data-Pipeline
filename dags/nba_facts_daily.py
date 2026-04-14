@@ -83,7 +83,7 @@ def nba_facts():
             print(f"No games on {date}")
             return {"game_ids": [], "date_nodash": date_nodash}
 
-        games_df = games_df.drop_duplicates(subset=["GAME_ID"])
+        # games_df = games_df.drop_duplicates(subset=["GAME_ID"])
         now      = dt.utcnow().isoformat()
         records  = []
 
@@ -94,13 +94,16 @@ def nba_facts():
                 "season":     SEASON,
                 "matchup":    row["MATCHUP"],
                 "team_id":    row["TEAM_ID"],
+                "pts":        row["PTS"],      
+                "plus_minus": row["PLUS_MINUS"], 
+                "wl":         row["WL"],        
                 "fetched_at": now,
             })
 
         print(f"{len(records)} games fetched")
         upload_to_s3(records, "games", date_nodash)
         return {
-            "game_ids":   [r["game_id"] for r in records],
+            "game_ids":   list(set([r["game_id"] for r in records])),
             "date_nodash": date_nodash
         }
 
