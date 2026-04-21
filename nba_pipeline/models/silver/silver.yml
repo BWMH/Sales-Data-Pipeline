@@ -1,0 +1,57 @@
+models:
+  - name: silver_box_scores
+    columns:
+      - name: MINUTES_PLAYED
+        tests:
+          - dbt_utils.not_accepted_values:
+              values: ['']
+      - name: box_score_id
+        tests:
+          - unique    
+  - name: silver_games
+    columns:
+      - name: game_team_id
+        tests:
+          - unique
+  - name: silver_player_details
+    columns:
+      - name: is_current_record
+        tests:
+          - accepted_values:
+              values: [TRUE]
+  - name: silver_standings
+    columns:
+      - name: is_current_record
+        tests:
+          - accepted_values:
+              values: [TRUE]
+  - name: silver_team_details
+    columns:
+      - name: is_current_record
+        tests:
+          - accepted_values:
+              values: [TRUE]
+  - name: silver_teams
+    columns:
+      - name: team_id
+        tests:
+          - unique
+      - name: team_id
+        tests:
+          - relationships:
+              to: ref('silver_games')
+              field: team_id  
+  - name: fact_player_performances
+    columns:
+      - name: player_id
+        tests:
+          - relationships:
+              to: ref('dim_players')
+              field: player_id
+  - name: fact_team_games
+    columns:
+      - name: team_id
+        tests:
+          - relationships:
+              to: ref('dim_teams')
+              field: team_id
