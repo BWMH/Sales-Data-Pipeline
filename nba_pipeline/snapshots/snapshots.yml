@@ -1,0 +1,22 @@
+snapshots:
+  - name: player_details_snapshot
+    columns:
+      - name: player_id
+        tests:
+          - unique:
+              config:
+                where: "dbt_valid_to is null"
+  - name: standings_snapshot
+    columns:
+      - name: team_id
+        tests:
+          - unique:
+              config:
+                where: "dbt_valid_to is null"
+  - name: team_details_snapshot
+    columns:
+      - name: team_id
+        tests:
+          - unique:
+              config:
+                where: "dbt_valid_to is null"

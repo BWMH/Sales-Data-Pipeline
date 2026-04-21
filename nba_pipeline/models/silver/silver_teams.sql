@@ -1,5 +1,5 @@
 SELECT
-    team_version_id
+    team_version_id,
     team_id,
     team_name,
     abbreviation,

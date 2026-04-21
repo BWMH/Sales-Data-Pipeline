@@ -1,0 +1,72 @@
+models:
+  - name: bronze_box_scores
+    columns:
+      - name: game_id
+        tests:
+          - not_null
+      - name: player_id
+        tests:
+          - not_null
+      - name: team_id
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['ACTIVE', 'INACTIVE']
+      - name: points
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+  - name: bronze_games
+    columns:
+      - name: game_id
+        tests:
+          - not_null
+      - name: game_date
+        tests:
+          - not_null
+      - name: team_id
+        tests:
+          - not_null
+      - name: pts
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+  - name: bronze_player_details
+    columns:
+      - name: player_id
+        tests:
+          - not_null
+      - name: full_name
+        tests:
+          - not_null
+  - name: bronze_standings
+    columns:
+      - name: team_id
+        tests:
+          - not_null
+      - name: conference_rank
+        tests:
+          - not_null
+  - name: bronze_team_details
+    columns:
+      - name: team_id
+        tests:
+          - not_null
+      - name: abbreviation
+        tests:
+          - not_null
+  - name: bronze_teams
+    columns:
+      - name: team_id
+        tests:
+          - not_null
+      - name: abbreviation
+        tests:
+          - not_null
+      - name: team_name
+        tests:
+          - not_null

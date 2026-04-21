@@ -1,0 +1,41 @@
+models:
+  - name: mart_team_analytics
+    columns:
+      - name: team_id
+        tests:
+          - unique
+          - not_null
+      - name: team_name
+        tests:
+          - unique
+          - not_null
+      - name: conference
+        tests:
+          - accepted_values:
+              values: ['East', 'West']
+      - name: conference_rank
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 15 # NBA Conferences have 15 teams
+      - name: current_season_win_pct
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+
+  - name: mart_player_analytics
+    columns:
+      - name: player_id
+        tests:
+          - unique
+          - not_null
+      - name: season_pts_rank
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 1
+      - name: current_season_fg_pct
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
